@@ -57,12 +57,12 @@ export default function App() {
       if (result.success) {
         setRehabPlan(result.plan);
         setStep('results');
-        console.log('✅ Plan loaded successfully');
+        console.log('Plan loaded successfully');
       } else {
         alert('Error generating plan: ' + result.error);
       }
     } catch (error) {
-      console.error('❌ Connection failed:', error);
+      console.error('Connection failed:', error);
       alert('Cannot connect to backend. Make sure FastAPI is running on http://localhost:8001');
     } finally {
       setIsLoading(false);

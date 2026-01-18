@@ -35,7 +35,7 @@ class RehabPlan(Base):
 def init_database():
     """Initialize database tables"""
     Base.metadata.create_all(bind=engine)
-    print("✅ Database initialized: rehab_plans.db")
+    print("Database initialized: rehab_plans.db")
 
 
 def save_plan(patient_info: dict, procedure: str, days_post_op: int, 
@@ -74,11 +74,11 @@ def save_plan(patient_info: dict, procedure: str, days_post_op: int,
         db.commit()
         db.refresh(db_plan)
         
-        print(f"💾 Saved plan to database (ID: {db_plan.id})")
+        print(f"Saved plan to database (ID: {db_plan.id})")
         return db_plan.id
         
     except Exception as e:
-        print(f"❌ Database save failed: {e}")
+        print(f"Database save failed: {e}")
         db.rollback()
         return None
     finally:

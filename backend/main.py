@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
-print("🔐 Environment variables loaded")
+print("Environment variables loaded")
 # Initialize FastAPI
 app = FastAPI(title="RehabAI API")
 
@@ -51,7 +51,7 @@ class RehabPlan(Base):
 
 # Create tables
 Base.metadata.create_all(bind=engine)
-print("✅ Database initialized: rehab_plans.db")
+print("Database initialized: rehab_plans.db")
 
 # Enable CORS
 app.add_middleware(
@@ -67,10 +67,10 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
     model = genai.GenerativeModel("gemini-1.0-pro")
-    print("✅ Gemini AI initialized (FREE tier)")
+    print("Gemini AI initialized (FREE tier)")
 else:
     model = None
-    print("⚠️  No GEMINI_API_KEY found - using smart mock data")
+    print("No GEMINI_API_KEY found - using smart mock data")
 
 # Rehab knowledge base
 REHAB_PROTOCOLS = {
@@ -135,7 +135,7 @@ REHAB_PROTOCOLS = {
 async def root():
     return {
         "status": "running",
-        "message": "RehabAI with Gemini AI 🚀",
+        "message": "RehabAI with Gemini AI ",
         "ai_enabled": model is not None,
         "version": "2.2.0-gemini-working"
     }
@@ -182,7 +182,7 @@ async def generate_plan(
     """Generate personalized rehab plan using Gemini AI"""
     
     print("\n" + "="*60)
-    print("📥 NEW PLAN REQUEST")
+    print("NEW PLAN REQUEST")
     print("="*60)
     
     try:
@@ -199,12 +199,12 @@ async def generate_plan(
         file_content = await file.read()
         file_text = file_content.decode('utf-8', errors='ignore') if file_content else ""
         
-        print(f"👤 Patient: Age {age}")
-        print(f"📅 Days post-op: {days_post_op}")
-        print(f"📝 Notes: {additional_notes[:50]}...")
+        print(f" Patient: Age {age}")
+        print(f" Days post-op: {days_post_op}")
+        print(f" Notes: {additional_notes[:50]}...")
         
         if model:
-            print("🤖 Using Gemini AI...")
+            print(" Using Gemini AI...")
             
             prompt = f"""You are a post-surgical rehabilitation AI. Analyze this patient and generate a rehab plan.
 
@@ -263,16 +263,16 @@ CRITICAL: Use exercises ONLY from protocols. Output raw JSON only."""
                     response_text = response_text.replace("```json", "").replace("```", "").strip()
                 
                 plan = json.loads(response_text)
-                print(f"✅ AI Generated: {plan.get('procedure_identified')}")
+                print(f"AI Generated: {plan.get('procedure_identified')}")
                 
             except Exception as e:
-                print(f"⚠️  AI failed: {e}, using fallback")
+                print(f"AI failed: {e}, using fallback")
                 plan = generate_smart_fallback(additional_notes, age, surgery_date, days_post_op)
         else:
-            print("⚠️  No API key, using smart fallback")
+            print("No API key, using smart fallback")
             plan = generate_smart_fallback(additional_notes, age, surgery_date, days_post_op)
         
-        print("✅ Plan ready")
+        print("Plan ready")
         print("="*60 + "\n")
         
         # Save to database
@@ -294,7 +294,7 @@ CRITICAL: Use exercises ONLY from protocols. Output raw JSON only."""
         }
         
     except Exception as e:
-        print(f"❌ ERROR: {str(e)}")
+        print(f"ERROR: {str(e)}")
         print(traceback.format_exc())
         
         return {
@@ -412,5 +412,5 @@ def generate_smart_fallback(notes, age, surgery_date, days_post_op):
 
 if __name__ == "__main__":
     import uvicorn
-    print("\n🚀 RehabAI Server Starting...")
+    print("\n RehabAI Server Starting...")
     uvicorn.run(app, host="0.0.0.0", port=8001)
